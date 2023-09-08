@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  convert:
+    image: ghcr.io/ggerganov/llama.cpp:full
+    volumes:
+      - ${MODELS_PATH}:/models
+    command: "--convert /models/$TARGET_MODEL/"
+
+  quantize:
+    image: ghcr.io/ggerganov/llama.cpp:full
+    volumes:
+      - ${MODELS_PATH}:/models
+    command: "--quantize /models/$TARGET_MODEL/ggml-model-f16.gguf /models/$TARGET_MODEL/ggml-model-q4_0.gguf 2"
+
+  server:
+    image: ghcr.io/ggerganov/llama.cpp:full
+    volumes:
+      - ${MODELS_PATH}:/models
+    command: "--server -m /models/$TARGET_MODEL/ggml-model-q4_0.gguf -c $SEQ_LEN --port 9090"
+    ports:
+      - "9090:9090"
