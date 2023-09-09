@@ -14,6 +14,7 @@ services:
 
   server:
     image: ghcr.io/ggerganov/llama.cpp:full
+    network_mode: "host"
     volumes:
       - ${MODELS_PATH}:/models
     command: "--server -m /models/$TARGET_MODEL/ggml-model-q4_0.gguf -c $SEQ_LEN --port 9090"
