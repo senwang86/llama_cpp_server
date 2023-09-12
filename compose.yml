@@ -12,11 +12,18 @@ services:
       - ${MODELS_PATH}:/models
     command: "--quantize /models/$TARGET_MODEL/ggml-model-f16.gguf /models/$TARGET_MODEL/ggml-model-q4_0.gguf 2"
 
-  server:
+  server_host:
     image: ghcr.io/ggerganov/llama.cpp:full
     network_mode: "host"
     volumes:
       - ${MODELS_PATH}:/models
     command: "--server -m /models/$TARGET_MODEL/ggml-model-q4_0.gguf -c $SEQ_LEN --port 9090"
+
+  server_bridge:
+    image: ghcr.io/ggerganov/llama.cpp:full
+    network_mode: "bridge"
+    volumes:
+      - ${MODELS_PATH}:/models
+    command: "--server -m /models/$TARGET_MODEL/ggml-model-q4_0.gguf -c $SEQ_LEN --host 0.0.0.0 --port 9090"
     ports:
-      - "9090:9090"
+      - 9090:9090

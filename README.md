@@ -5,7 +5,7 @@ This is an experimental repo that uses llama.cpp for LLM applications.
 - `compose.yml` contains the setup for the llama.cpp docker containers, which includes `convert`, `quantize` and `server` services
   - `docker-compose run convert`
   - `docker-compose run quantize`
-  - `docker-compose up server`
+  - `docker-compose up server_host`
 - `index.js` is used to run `server` service test.
 
 ## Reference
