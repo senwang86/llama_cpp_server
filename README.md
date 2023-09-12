@@ -23,3 +23,5 @@ This is an experimental repo that uses llama.cpp for LLM applications.
 - [Signal LLM Compress](https://github.com/Wheest/signal-compress/tree/main), an example application that uses llama.cpp.
   - [Detailed setup](https://github.com/Wheest/wheest.github.io/blob/6a5e0c1ff075a03d3ed2c778243e878d767b39ba/_posts/2023-09-05-signal_compress_docker_compose.md)
 - [llama2-webui](https://github.com/liltom-eth/llama2-webui)
+- Docker
+   - Note that `docker-compose run` command does not create any of the ports specified in the service configuration. This prevents the port collisions with already open ports. If it needs service's ports created and mapped to the host, specify the `--service-ports` flag, i.e., `docker-compose run --service-ports host server`. [ref](https://stackoverflow.com/questions/33066528/should-i-use-docker-compose-up-or-run)
