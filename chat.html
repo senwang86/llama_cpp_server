@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Application</title>
+    <style>
+        .chat-container {
+            width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        .message-container {
+            margin-bottom: 10px;
+        }
+        .message-container .sender {
+            font-weight: bold;
+        }
+        .message-container .content {
+            margin-top: 5px;
+        }
+        .input-container {
+            margin-top: 20px;
+        }
+        .input-container input {
+            width: 100%;
+            padding: 10px;
+        }
+        .input-container button {
+            margin-top: 10px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div id="messages"></div>
+        <div class="input-container">
+            <input type="text" id="message-input" placeholder="Type your message">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const url = "http://100.71.162.51:9090/completion";
+        async function Test(requestUrl, prompt) {
+            let response = await fetch(requestUrl, {
+                method: 'POST',
+                body: JSON.stringify({
+                    prompt,
+                    temperature: 0.1,
+                    top_k: 40,
+                    top_p: 0.9,
+                    repeat_penalty: 1.05,
+                    n_predict: 32,
+                    stream: false,
+                }),
+            });
+            let result = JSON.parse((await response.text()));
+            console.log(result);
+            let content = result['content'];
+            displayMessage("Server", content);
+        }
+
+        function displayMessage(sender, content) {
+            let messagesContainer = document.getElementById("messages");
+            let messageContainer = document.createElement("div");
+            messageContainer.classList.add("message-container");
+
+            let senderElement = document.createElement("div");
+            senderElement.classList.add("sender");
+            senderElement.textContent = sender;
+
+            let contentElement = document.createElement("div");
+            contentElement.classList.add("content");
+            contentElement.textContent = content;
+
+            messageContainer.appendChild(senderElement);
+            messageContainer.appendChild(contentElement);
+            messagesContainer.appendChild(messageContainer);
+        }
+
+        function sendMessage() {
+            let messageInput = document.getElementById("message-input");
+            let prompt = messageInput.value;
+            displayMessage("You", prompt);
+            messageInput.value = "";
+            Test(url, prompt);
+        }
+    </script>
+</body>
+</html>
